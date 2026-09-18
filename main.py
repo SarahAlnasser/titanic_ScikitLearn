@@ -25,6 +25,8 @@ def preprocess_data(df):
     df["fare"].fillna("0.00", inplace=True) #fill in empty fare slots
     df.drop(columns=["fare"], inplace=True)
 
+    fill_missing_ages(df)
+
     # convert gender
     df["Sex"] = df["Sex"].map({'male':1,"female":0})
 
@@ -36,6 +38,20 @@ def preprocess_data(df):
 
 
 ##fill in missing ages##
+def fill_missing_ages(df):
+    age_fill_map = {}
+    for pclass in df["Pclass"].unique():
+        if pclass not in age_fill_map:
+            age_fill_map[pclass] = df[df["Pclass"] == pclass]["Age"].median()
 
-#
+    df["Age"] = df.apply(lambda row: age_fill_map[row["Pclass"]] if pd.isnull(row["Age"]) else row["Age"], axis=1)
+
+    data = preprocess_data(data)
+
+##create features/target variables(make flashcards)##
+
+##ML pre-processing##
+
+##hyperparemeter tuning##
+
 #
