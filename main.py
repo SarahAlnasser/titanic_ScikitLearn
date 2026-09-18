@@ -19,6 +19,21 @@ data.info() #to know what type of data we are working with
 print(data.isnull().sum()) #get how many missing values
 
 ##data cleaning and feature engineering##
+def preprocess_data(df):
+    df.drop(columns=["PassengerId", "Name", "Ticket", "Cabin"], inplace=True) #removes unwanted data
+
+    df["fare"].fillna("0.00", inplace=True) #fill in empty fare slots
+    df.drop(columns=["fare"], inplace=True)
+
+    # convert gender
+    df["Sex"] = df["Sex"].map({'male':1,"female":0})
+
+    #feature engineering
+    df["FamilySize"] = df["SibSp"] + ["Parch"]
+    df["IsAlone"] = np.where(df["FamilySize"] == 0, 1, 0)
+    df["FareBin"] = np.qcut(df["Fare"], 4, labels=False)
+    df["AgeBin"] = pd.cut(df["Age"], bins=[0,12,20,40,60, np.inf], labels=False)
+
 
 ##fill in missing ages##
 
