@@ -49,9 +49,18 @@ def fill_missing_ages(df):
     data = preprocess_data(data)
 
 ##create features/target variables(make flashcards)##
+x = data.drop(columns=["Survived"])
+y = data["Survived"]
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=42)
 
 ##ML pre-processing##
+scaler = MinMaxScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
 
 ##hyperparemeter tuning##
 
-#
+##predictions and evaluate##
+
+##plot##
