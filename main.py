@@ -59,7 +59,20 @@ scaler = MinMaxScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
-##hyperparemeter tuning##
+##hyperparemeter tuning - KNN##
+def tune_model(x_train, y_train):
+    param_grid = {
+        "n_neighbors":range(1,21),
+        "metrics" : ["euclidean", "manhattan", "minkowski"],
+        "weights" : ["uniform", "distance"]
+    }
+
+    model = KNeighborsClassifier()
+    grid_search = GridSearchCV(model, param_grid, cv=5, n_jobs=-1)
+    grid_search.fit(x_train, y_train)
+    return grid_search.best_estimator_
+
+best_model = tune_model(x_train, y_train)
 
 ##predictions and evaluate##
 
